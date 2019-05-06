@@ -1,0 +1,27 @@
+* {
+  font-family: "Lato", serif;
+}
+
+p {
+  line-height: 2;
+}
+
+a {
+  color: #1a6e8e;
+}
+
+.wrapper {
+  width: 100%;
+  max-width: 720px;
+  padding: 30px;
+  margin: auto;
+  margin-top: 2%;
+}
+
+.menu a:not(:last-child) {
+  margin-right: 15px;
+}
+
+.articles {
+  margin-top: 5%;
+}

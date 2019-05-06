@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i|Fira+Mono">
+  <link rel="stylesheet" href="../../css/main.css">
+  <link rel="stylesheet" href="../../css/default.css">
+  <title>Document</title>
+</head>
+<body>
+  <div class="wrapper">
+    <h1>l'Inférence de type dans TypeScript et Go</h1>
+    <p>
+      L’inférence de type est la compacité du compilateur à déduire les types de données sans avoir besoin de le préciser explicitement. La plupart des langages statiquement typé ont un moteur d’inférence de type.
+      Faire recours à l’inférence de type améliora d’une certaine manière la lisibilité du code en réduisant la la verbosité et la redondance.
+      Il faut toute fois être prudent sur qqu’ limitation qui dépenderont du langage et ce qu’on va essayer de voir dans ce billet en regardant de plus prés les cas de TypeScript et Go.
+    </p>
+
+    <h2>TypeScript :</h2>
+    <p>En TypeScript on peut initier une variable implicitement</p>
+    <div class="sourceCode">
+      <pre class="sourceCode typescript">
+        <code class="sourceCode typescript hljs">
+          <span class="hljs-keyword">let x = 1; // x est de type number</span>
+          <span class="hljs-keyword">x = ‘1’; // Erreur</span>
+        </code>
+      </pre>
+    </div>
+    <p>
+      Ici, même si le type n’est pas déclarer, le moteur d’inférence de type saura que `x` est de type `number`.
+      c’est exactement l’équivalent de :
+    </p>
+    <div class="sourceCode">
+        <pre class="sourceCode typescript">
+          <code class="sourceCode typescript hljs">
+            <span class="hljs-keyword">let x: number = 1;</span>
+          </code>
+        </pre>
+      </div>
+
+      <p>
+        Si on explore l’arbre de la syntaxe abstraite du premier code :
+      </p>
+      <img src="../../images/ast.png">
+
+      <p>
+        Le type est donc connu à la phase de l’analyse syntaxique, inutile de le déclarer explicitement.
+      </p>
+
+      <p>
+        Le type est également inférer dans les expressions :
+      </p>
+
+      <div class="sourceCode">
+          <pre class="sourceCode typescript">
+            <code class="sourceCode typescript hljs">
+              <span class="hljs-keyword">const age = 24;</span>
+              <span class="hljs-keyword">const avgAge = age; // evgAge est de type number</span>
+            </code>
+          </pre>
+      </div>
+
+      <p>Dans la signature de fonction :</p>
+      <div class="sourceCode">
+          <pre class="sourceCode typescript">
+            <code class="sourceCode typescript hljs">
+                // sum:: number -> number -> number
+                const sum = (x: number) => (y: number) => x + y;
+                const f = sum(42)(1);
+                
+            </code>
+          </pre>
+      </div>
+      <span>Inutile de préciser le type de la signature.</span>
+
+      <h3>Limitations :</h3>
+      <p>
+        Il est important de préciser quelques limitations de l’inférence de type dans TypeScript afin de pourvoir l’utiliser à bon escient.
+      </p>
+
+      <h4>Les tuples</h4>
+      <p>L’ordre des types des éléments d’une tuple peut ne pas être respecter, on peut ainsi faire :</p>
+      <div class="sourceCode">
+          <pre class="sourceCode typescript">
+            <code class="sourceCode typescript hljs">
+                let points3D= [1, 4, ‘5’]; // Union de types (string | number)[]
+                points3D = [‘8’, ‘9’, 7]; // Aucune erreur                
+            </code>
+          </pre>
+      </div>
+
+      <p>Si on cherche à respecter l’ordre :</p>
+
+      <div class="sourceCode">
+          <pre class="sourceCode typescript">
+            <code class="sourceCode typescript hljs">
+                let points3D: [number, number, string] = [1, 4, ‘5’];
+                points3D = [‘8’, ‘9’, 7]; // Erreur
+                              
+            </code>
+          </pre>
+      </div>
+    </div>
+  <script src="../../js/hl.js" type="application/javascript"></script>
+</body>
+</html>
