@@ -19,8 +19,7 @@
       que d'autres. Go par exemple afin de déduire le type d'une variable il se base sur le type l'opérant de droit et ne peut le déduire si
       le type de ce dérnier n'est pas connu, alors que Haskell peut aller plus loin jusqu'à la déduction des types polymorphiques ( l'équivalent des types génériques ).
       <br>
-      L'utilisation l’inférence de type améliora la lisibilité du code en réduisant la verbosité et la redondance mais a certaines limites.
-      Dans ce billet on va voir les cas d'utilisation et les limites de l'inférence.
+      L'utilisation de l’inférence de type améliora la lisibilité du code en réduisant la verbosité et la redondance mais a certaines limites selon le langage.
     </p>
 
     <h2>TypeScript :</h2>
@@ -104,6 +103,49 @@ points3D = [<span class="hljs-string">'8'</span>, <span class="hljs-string">'9'<
 
     <br><br>
     <h2>Go :</h2>
+    <p>L'inférence de type dans Go est très limité et elle se limite au jeton <code>:=</code> certainement parce que Go se veut un langage simple, expressif et concis.
+    <br>
+
+    <h3>Variables :</h3>
+    <p>Il y a plusieurs syntaxes pour déclarer ou initier dans Go.</p>
+    
+    <h3>La syntaxe longue :</h3>
+
+<pre><code class="hljs go"><span class="hljs-keyword">var </span> mainLanguage <span class="hljs-keyword">string</span> = <span class="hljs-string">"Go"</span>
+<span class="hljs-keyword">var </span> frontEndLanguage = <span class="hljs-string">"TypeScript"</span>
+<span class="hljs-built_in">fmt.Printf</span>(<span class="hljs-string">"mainLanguage: %T, frontEndLanguage: %T\n"</span>, mainLanguage, frontEndLanguage)
+</code></pre>
+Sortie :
+<code>mainLanguage: string, frontEndLanguage: string</code><br>
+Et si on essaie de reaffecter la variable <code>mainLanguage</code> avec un autre type :
+<pre><code class="hljs go">mainLanguage = <span class="hljs-comment">43</span></code></pre>
+Sortie :
+<code>cannot use 43 (type int) as type string in assignment</code>
+
+<h3>La syntaxe courte :</h3>
+<p>La syntaxe courte est la syntaxe idiomatique d'initialisatin dans Go.</p>
+<pre><code class="hljs go">x := <span class="hljs-number">7</span>
+<span class="hljs-built_in">fmt.Printf</span>(<span class="hljs-string">"x: %T\n"</span>, x)
+</code></pre>
+Sortie : <code>x: int</code>
+
+<h3>Fonctions :</h3>
+<p>Pour le fonctions le choix de Go est claire, il faut déclarer le type explicitement, que ça soit pour les paramètres ou la signature mais pas pour son affectation.</p>
+<pre><code class="hljs go"><span class="hljs-built_in">import </span><span class="hljs-string">"fmt"</span>
+
+<span class="hljs-keyword">func</span> Sum(x, y float64) (r float64) {
+    <span class="hljs-keyword">r</span> = x + y
+    <span class="hljs-keyword">return</span> r
+}
+
+<span class="hljs-keyword">func</span> main() {
+    r := <span class="hljs-number">Sum</span>(8, 2)
+    <span class="hljs-built_in">fmt.Printf</span>(<span class="hljs-string">"r: %T\n"</span>, r)
+}
+</code></pre>
+
+<p>Sortie : <code>r: float64</code></p>
+<p>Ceci peut être verbeux dans certains cas mais laisse moins de doute que sur TypeScript comme sur les exemples plus haut.</p>
 </div>
   <script src="../js/hl.js" type="application/javascript"></script>
 </body>
