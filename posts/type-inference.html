@@ -38,7 +38,7 @@ x = <span class="hljs-string">'1'</span>; <span class="hljs-comment">// Erreur</
         Le type est également inférer dans les expressions tant que le type de l'opérant de droit est connu :
       </p>
 <pre><code class="hljs typescript"><span class="hljs-keyword">const </span> a = <span class="hljs-string">'init'</span>;
-<span class="hljs-keyword">const </span> b = <span class="hljs-string">a</span>; <span class="hljs-comment">// b est de type number</span></code></pre>
+<span class="hljs-keyword">const </span> b = <span class="hljs-string">a</span>; <span class="hljs-comment">// b est de type string</span></code></pre>
 
       <br><p>TypeScript peut également déduire les signatures de fonction :</p>
 <pre><code class="hljs typescript"><span class="hljs-comment">// sum:: number -> number -> number</span>
@@ -116,15 +116,16 @@ points3D = [<span class="hljs-string">'8'</span>, <span class="hljs-string">'9'<
 <span class="hljs-keyword">var </span> frontEndLanguage = <span class="hljs-string">"TypeScript"</span>
 <span class="hljs-built_in">fmt.Printf</span>(<span class="hljs-string">"mainLanguage: %T, frontEndLanguage: %T\n"</span>, mainLanguage, frontEndLanguage)
 </code></pre>
-Sortie :
-<code>mainLanguage: string, frontEndLanguage: string</code><br>
-Et si on essaie de reaffecter la variable <code>mainLanguage</code> avec un autre type :
+<p>Sortie :
+<code>mainLanguage: string, frontEndLanguage: string</code></p>
+
+<p>Et si on essaie de reaffecter la variable <code>mainLanguage</code> avec un autre type :</p>
 <pre><code class="hljs go">mainLanguage = <span class="hljs-comment">43</span></code></pre>
 Sortie :
 <code>cannot use 43 (type int) as type string in assignment</code>
 
 <h3>La syntaxe courte :</h3>
-<p>La syntaxe courte est la syntaxe idiomatique d'initialisatin dans Go.</p>
+<p>La syntaxe courte est la syntaxe idiomatique d'initialisation dans Go.</p>
 <pre><code class="hljs go">x := <span class="hljs-number">7</span>
 <span class="hljs-built_in">fmt.Printf</span>(<span class="hljs-string">"x: %T\n"</span>, x)
 </code></pre>
