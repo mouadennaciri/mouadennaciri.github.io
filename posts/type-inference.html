@@ -6,104 +6,102 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i|Fira+Mono">
-  <link rel="stylesheet" href="../../css/main.css">
-  <link rel="stylesheet" href="../../css/default.css">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/default.css">
   <title>Document</title>
 </head>
 <body>
   <div class="wrapper">
     <h1>l'Inférence de type dans TypeScript et Go</h1>
     <p>
-      L’inférence de type est la compacité du compilateur à déduire les types de données sans avoir besoin de le préciser explicitement. La plupart des langages statiquement typé ont un moteur d’inférence de type.
-      Faire recours à l’inférence de type améliora d’une certaine manière la lisibilité du code en réduisant la la verbosité et la redondance.
-      Il faut toute fois être prudent sur qqu’ limitation qui dépenderont du langage et ce qu’on va essayer de voir dans ce billet en regardant de plus prés les cas de TypeScript et Go.
+      L’inférence de type est la compacité du compilateur à déduire les types de données sans avoir besoin de le préciser explicitement.
+      La plupart des langages au typage fort et statique ont un moteur d’inférence de type mais comme toute chose certains langages l'ont mieux implémenter
+      que d'autres. Go par exemple afin de déduire le type d'une variable il se base sur le type l'opérant de droit et ne peut le déduire si
+      le type de ce dérnier n'est pas connu, alors que Haskell peut aller plus loin jusqu'à la déduction des types polymorphiques ( l'équivalent des types génériques ).
+      <br>
+      L'utilisation l’inférence de type améliora la lisibilité du code en réduisant la verbosité et la redondance mais a certaines limites.
+      Dans ce billet on va voir les cas d'utilisation et les limites de l'inférence.
     </p>
 
     <h2>TypeScript :</h2>
-    <p>En TypeScript on peut initier une variable implicitement</p>
-    <div class="sourceCode">
-      <pre class="sourceCode typescript">
-        <code class="sourceCode typescript hljs">
-          <span class="hljs-keyword">let x = 1; // x est de type number</span>
-          <span class="hljs-keyword">x = ‘1’; // Erreur</span>
-        </code>
-      </pre>
-    </div>
+    <p>En TypeScript on peut initier une variable implicitement, comme :</p>
+    <pre><code class="hljs typescript"><span class="hljs-keyword">let</span> x = <span class="hljs-number">1</span>; <span class="hljs-comment">// x est de type number</span>
+x = <span class="hljs-string">'1'</span>; <span class="hljs-comment">// Erreur</span>
+</code></pre>
     <p>
-      Ici, même si le type n’est pas déclarer, le moteur d’inférence de type saura que `x` est de type `number`.
-      c’est exactement l’équivalent de :
+      Ici, même si le type n’est pas déclarer, le moteur d’inférence de type saura à la phase de l’analyse syntaxique que <code>x</code> est de type <code>number</code>.
+      C'est exactement l’équivalent de :
     </p>
-    <div class="sourceCode">
-        <pre class="sourceCode typescript">
-          <code class="sourceCode typescript hljs">
-            <span class="hljs-keyword">let x: number = 1;</span>
-          </code>
-        </pre>
-      </div>
+<pre><code class="hljs typescript"><span class="hljs-keyword">let </span> x: number = <span class="hljs-number">1</span>;</code></pre>
 
-      <p>
-        Si on explore l’arbre de la syntaxe abstraite du premier code :
+      <br><p>
+        Le type est également inférer dans les expressions tant que le type de l'opérant de droit est connu :
       </p>
-      <img src="../../images/ast.png">
+<pre><code class="hljs typescript"><span class="hljs-keyword">const </span> a = <span class="hljs-string">'init'</span>;
+<span class="hljs-keyword">const </span> b = <span class="hljs-string">a</span>; <span class="hljs-comment">// b est de type number</span></code></pre>
 
-      <p>
-        Le type est donc connu à la phase de l’analyse syntaxique, inutile de le déclarer explicitement.
+      <br><p>TypeScript peut également déduire les signatures de fonction :</p>
+<pre><code class="hljs typescript"><span class="hljs-comment">// sum:: number -> number -> number</span>
+<span class="hljs-keyword">const </span> sum = (x: number) => (y: number) => x + y;
+
+<span class="hljs-keyword">const </span> [z1, z2] = [<span class="hljs-number">42</span>, <span class="hljs-number">1</span>];
+<span class="hljs-keyword">let </span> sumRes = <span class="hljs-number">sum</span>(z1)(z2);
+<span>sumRes = </span><span class="hljs-string">'Horatio'</span>; <span class="hljs-comment">// Impossible d'assigner le type de '"Horatio"' au type 'number'</span>
+</code></pre>
+
+      <p>Le type de signature de la fonction <code>sum</code> est déduit en déterminant le type de <code>x + y</code>, 
+      chose relativement simple à faire pour le compilateur étant que les types des paramètres <code>x</code> et <code>y</code> sont définit explicitement.</p>
+
+      <h2>Les limites :</h2>
+
+      <h3>n-uplets :</h3>
+      <p>Un n-uplet ( <em>Tuple</em> en anglais ) est un tableau de différents types avec une taille prédéfini.</p>
+      <p>TypeScript fait l'effort de déduire les types du n-uplet mais ne peut déterminer leurs ordres.</p>
+      <p>Prenons un simple exemple :</p>
+<pre><code class="hljs typescript"><span class="hljs-keyword">let </span> points3D = [<span class="hljs-number">1</span>, <span class="hljs-number">4</span>, <span class="hljs-string">'5'</span>]; <span class="hljs-comment">// Union de types (string | number)[]</span>
+points3D = [<span class="hljs-string">'1'</span>, <span class="hljs-string">'9'</span>, <span class="hljs-number">7</span>]; <span class="hljs-comment">// Aucune erreur</span>
+</code></pre>
+
+      <p>Si on cherche à respecter l’ordre des types :</p>
+
+<pre><code class="hljs typescript"><span class="hljs-keyword">let </span> points3D: [number, number, string] = [<span class="hljs-number">1</span>, <span class="hljs-number">4</span>, <span class="hljs-string">'5'</span>]; <span class="hljs-comment">// Union de types (string | number)[]</span>
+points3D = [<span class="hljs-string">'8'</span>, <span class="hljs-string">'9'</span>, <span class="hljs-number">7</span>]; <span class="hljs-comment">// Erreur</span>
+</code></pre>
+    <br><p>Dans d'autres langages tel que OCaml l'ordre des types est aussi respecter.</p>
+
+    <h3>Fonctions :</h3>
+      <p>Sur un exemple plus haut on a vu que TypeScript peut déduire le type de signature de la fonction mais seulement si le type de paramètres est connu
+        malgré qu'il peut être déduit depuis l'expression du retour.
       </p>
+<pre><code class="hljs typescript"><span class="hljs-keyword">const </span> f = (x) => (y) => x + y;
+<span class="hljs-keyword">const </span> fRes = <span class="hljs-number">f</span>('a')('b'); <span class="hljs-comment">// Aucune erreur</span>
+</code></pre>
 
-      <p>
-        Le type est également inférer dans les expressions :
-      </p>
+<br>
+<p>Reprenons avec un autre exemple :</p>
+<pre><code class="hljs typescript"><span class="hljs-keyword">Class </span>TriangleUtils {
 
-      <div class="sourceCode">
-          <pre class="sourceCode typescript">
-            <code class="sourceCode typescript hljs">
-              <span class="hljs-keyword">const age = 24;</span>
-              <span class="hljs-keyword">const avgAge = age; // evgAge est de type number</span>
-            </code>
-          </pre>
-      </div>
+  <span class="hljs-keyword">triangleArea</span>(x: number, y: number): number {
+    <span class="hljs-keyword">return</span> 0.5 * <span class="hljs-keyword">this.multi</span>(x, y);
+  }
 
-      <p>Dans la signature de fonction :</p>
-      <div class="sourceCode">
-          <pre class="sourceCode typescript">
-            <code class="sourceCode typescript hljs">
-                // sum:: number -> number -> number
-                const sum = (x: number) => (y: number) => x + y;
-                const f = sum(42)(1);
-                
-            </code>
-          </pre>
-      </div>
-      <span>Inutile de préciser le type de la signature.</span>
+  <span class="hljs-keyword">private  mult</span>(x, y) {
+    x = 'a'; <span class="hljs-comment">// Aucune erreur.</span>
+    <span class="hljs-keyword">return</span> x * y;
+  }
+}
+</code></pre>
+<p>Ici TypeScript ne peut déduire les types des paramètres de <code>mult</code> malgré qu'elle est appelée directement sur <code>triangleArea()</code> où le type de <code>x</code> et <code>y</code> est connu
+  en plus qu'elle est privée et donc ne peut être appelée à l'extérieur de la classe.</p>
 
-      <h3>Limitations :</h3>
-      <p>
-        Il est important de préciser quelques limitations de l’inférence de type dans TypeScript afin de pourvoir l’utiliser à bon escient.
-      </p>
-
-      <h4>Les tuples</h4>
-      <p>L’ordre des types des éléments d’une tuple peut ne pas être respecter, on peut ainsi faire :</p>
-      <div class="sourceCode">
-          <pre class="sourceCode typescript">
-            <code class="sourceCode typescript hljs">
-                let points3D= [1, 4, ‘5’]; // Union de types (string | number)[]
-                points3D = [‘8’, ‘9’, 7]; // Aucune erreur                
-            </code>
-          </pre>
-      </div>
-
-      <p>Si on cherche à respecter l’ordre :</p>
-
-      <div class="sourceCode">
-          <pre class="sourceCode typescript">
-            <code class="sourceCode typescript hljs">
-                let points3D: [number, number, string] = [1, 4, ‘5’];
-                points3D = [‘8’, ‘9’, 7]; // Erreur
-                              
-            </code>
-          </pre>
-      </div>
+  <p>Alors, oui, on a le drapeau <code>--noImplicitAny</code> qu'on peut rajouter aux options de compilation ou au <code>tsconfig.json</code> qu'avec
+    le compilateur refusera de compiler s'il ne peut déduire le type mais :</p>
+    <ul>
+      <li>Faut déjà le connaître.</li>
+      <li>Ce n'est pas la configuration par défaut des frameworks qui utilisent TypeScript tel que Angular.</li>
+      <li>Ça nécessitera toujours ( pour les cas où TypeScript ne peut déduire le type ) de définir les types explicitement.</li>
+    </ul>
     </div>
-  <script src="../../js/hl.js" type="application/javascript"></script>
+  <script src="../js/hl.js" type="application/javascript"></script>
 </body>
 </html>
