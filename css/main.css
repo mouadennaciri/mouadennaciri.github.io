@@ -18,6 +18,10 @@ a {
   margin-top: 2%;
 }
 
+.menu {
+  text-align: center;
+}
+
 .menu a:not(:last-child) {
   margin-right: 15px;
 }
