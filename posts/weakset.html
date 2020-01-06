@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i|Fira+Mono">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/default.css">
+  <title>JavaScript : l'objet WeakSet</title>
+</head>
+<body>
+  <div class="wrapper">
+    <a href="../index.html">Accueil</a>
+    <h1>JavaScript : l'objet WeakSet</h1>
+
+    <p>
+      L'objet <code>WeakSet</code> introduit dans ES2015 est pour l'objet <code>Set</code> ce qu'est <code>WeakMap</code> pour l'objet <code>Map</code>.
+      <br>
+      L'ensemble <code>Set</code> est une structure de donnée à habitant unique. Un ensemble ne peut avoir deux habitants de la même valeur (dans la limite de la comparaison stricte de JavaScript).
+    </p>
+
+    <h2>Syntaxe formelle :</h2>
+    <p>Un ensemble <code>Set</code> se définit ainsi :</p>
+    <div class="custom-code-bloc">
+      <span>Set([ iterable ])</span>
+    </div>
+    <p>L'argument <i>iterable</i> est optionel et peut prendre tout objet itérable.</p>
+
+    <h2>Exemples :</h2>
+<pre><code class="hljs javascript"><span class="hljs-keyword">const</span> str = <span class="hljs-string">'Kaamelott'</span>;
+<span class="hljs-keyword">const</span> s = <span class="hljs-class">new Set(str);</span> <span class="hljs-comment">// Aucune erreur</span>
+<span class="hljs-keyword">const</span> s2 = <span class="hljs-class">new Set(1);</span> <span class="hljs-comment">// Erreur</span>
+</code></pre>
+
+    <h2>Chaîne prototypale :</h2>
+    L'implémentation de l'objet <code>Set</code> requiert qu'il soit une table de hachage ou une structure similaire. De ce fait les méthodes et propriétés opérants sur l'ensemble offrent une compléxité de O(1) en moyenne
+    sur les opérations d’insertion, de recherche et de suppression.
+    <p>Voici quelques propriétés et méthodes attachés à l'objet <code>Set</code> :</p>
+    <ul>
+      <li>
+        <div>// iterable -> boolean</div>
+        <code>Set.prototype.has(value)</code>
+      </li>
+      <li>
+        <div>// iterable -> Set</div>
+        <code>Set.prototype.add(value)</code>
+      </li>
+      <li>
+        <div>// -> number</div>
+        <code>Set.prototype.size</code>
+      </li>
+      <li>
+        <div>// iterable -> boolean</div>
+        <code>Set.prototype.delete(value)</code>
+      </li>
+    </ul>
+
+    <h2>La particularité de WeakSet :</h2>
+    <p>Un <code>WeakSet</code> est un peu près similaire à l'objet <code>Set</code> à la différence qu'il a une persistence volatile.</p>
+    <p>La mémoire dans JavaScript comme dans plusieurs d'autres langages est libérée par un ramasse-miettes (ou <i>garbage collector</i> en anglais)</p>
+    <p>Le ramasse-miettes a la lourde tâche de libérer de la mémoire inutilisée. Il faut qu'il détermine quel objet n'est plus référencé et le recyclé quand c'est le cas.
+    Dans les moteurs JavaScript comme dans le compilateur Zend de PHP le ramasse-miettes utilise l'algorithme de comptage de références pour déterminer quelle référence libérée.</p>
+    <p>Prenons un exemple :</p>
+    <pre><code class="hljs javascript"><span class="hljs-keyword">let</span> arr = <span class="hljs-string">['Horatio']</span>; <span class="hljs-comment">// [1]</span>
+<span class="hljs-keyword">const</span> mySet = <span class="hljs-class">new Set(arr);</span> <span class="hljs-comment">// [2]</span>
+arr = <span class="hljs-class">void 0</span> <span class="hljs-comment">// [3]</span>
+console.log(mySet.size) <span class="hljs-comment">// [4]</span>
+</code></pre>
+
+<div>[1] : Ici l'algorithme de comptage de références, appelons le <strong>comptRef</strong>, de l'objet <code>arr</code> va être initié à 1.</div>
+<div>[2] : Maintenant que <code>arr</code> est associé à <code>mySet</code> son comptRef est incrémenté à 2.</div>
+<div>[3] : On re-définit <code>arr</code> à <code>undefined</code>, le comptRef est décrémenté à 1.
+<div>[4] : La taille de <code>mySet</code> est 1 et la valeur de <code>arr</code> est toujours référencée.
+
+<p>Pour que le ramasse-miettes puisse libéré une référence il faut que son comptRef arrive à 0.</p>
+
+<p><code>WeakSet</code> a la particularité d'être un objet a référence dite faible. C'est-à-dire qu'il n'incrémente pas le compteur de référence de l'objet vers lequel il pointe.</p>
+<p>Si on reprenons l'exemple plus haut :</p>
+<pre><code class="hljs javascript"><span class="hljs-keyword">let</span> arr = <span class="hljs-string">['Horatio']</span>; <span class="hljs-comment">// [1]</span>
+<span class="hljs-keyword">const</span> myWeakSet = <span class="hljs-class">new WeakSet(arr);</span> <span class="hljs-comment">// [2]</span>
+arr = <span class="hljs-class">void 0</span> <span class="hljs-comment">// [3]</span>
+console.log(myWeakSet) <span class="hljs-comment">// [4]</span>
+</code></pre>
+
+<div>[1] : Le comptRef de <code>arr</code> est initié à 1.</div>
+<div>[2] : Le comptRef de <code>arr</code> n'est pas incrémenté est vaut toujours 1.
+<div>[3] : Le comptRef est décrémenté à 0.
+<div>[4] : <code>myWeakSet</code> est maintenant vide.
+
+  <div class="end-page"></div>
+</div>
+  <script src="../js/hl.js" type="application/javascript"></script>
+</body>
+</html>

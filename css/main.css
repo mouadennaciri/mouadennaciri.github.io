@@ -29,3 +29,19 @@ a {
 .articles {
   margin-top: 5%;
 }
+
+.custom-code-bloc {
+  padding: 20px;
+  font-size: 18px;
+  background-color: #ccc;
+}
+
+.custom-code-bloc-small {
+  padding: 10px;
+  font-size: 16px;
+  background-color: #ccc;
+}
+
+.end-page {
+  margin-bottom: 60px;
+}
