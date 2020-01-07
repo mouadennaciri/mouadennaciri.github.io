@@ -79,7 +79,7 @@ console.log(mySet.size) <span class="hljs-comment">// [4]</span>
 <p><code>WeakSet</code> a la particularité d'être un objet a référence dite faible. C'est-à-dire qu'il n'incrémente pas le compteur de référence de l'objet vers lequel il pointe.</p>
 <p>Si on reprenons l'exemple plus haut :</p>
 <pre><code class="hljs javascript"><span class="hljs-keyword">let</span> arr = <span class="hljs-string">['Horatio']</span>; <span class="hljs-comment">// [1]</span>
-<span class="hljs-keyword">const</span> myWeakSet = <span class="hljs-class">new WeakSet(arr);</span> <span class="hljs-comment">// [2]</span>
+<span class="hljs-keyword">const</span> myWeakSet = <span class="hljs-class">new WeakSet().add(arr);</span> <span class="hljs-comment">// [2]</span>
 arr = <span class="hljs-class">void 0</span> <span class="hljs-comment">// [3]</span>
 console.log(myWeakSet) <span class="hljs-comment">// [4]</span>
 </code></pre>
@@ -89,6 +89,12 @@ console.log(myWeakSet) <span class="hljs-comment">// [4]</span>
 <div>[3] : Le comptRef est décrémenté à 0.
 <div>[4] : <code>myWeakSet</code> est maintenant vide.
 
+
+  <h2>Enfin...</h2>
+  <p><code>WeakSet</code> est toute fois limité par le fait qu'il n'est pas itérable. Ce qu'il fait qu'il n'a les méthodes <code>.keys()</code>
+    <code>.values()</code>,
+    <code>.entries()</code>,
+    <code>.forEach()</code> et <code>.clear()</code> dans sa chaîne prototypale.</p>
   <div class="end-page"></div>
 </div>
   <script src="../js/hl.js" type="application/javascript"></script>
