@@ -24,10 +24,10 @@
 
     <h2>Complexité cyclomatique</h2>
     <p>
-      La complexité cyclomatique est une métrique déstinée à mesurer le nombre de chemins linéaires et possibles
+      La complexité cyclomatique est une métrique déstinée à mesurer le nombre de chemins linéaires possibles
       au sein d'un code source. Ce nombre nous donne deux indications :
       <ul>
-        <li>La maintenabilité du code source car plus ce nombre est grand plus il est difficile de comprendre le code source ;</li>
+        <li>La maintenabilité du code source, car plus ce nombre est grand plus il est difficile de comprendre le code source ;</li>
         <li>Une indication qualitative sur le nombre minimal de tests nécessaires pour couvrire tous les chemins.</li>
       </ul>
     </p>
@@ -59,7 +59,7 @@
   Publier en 2016 par SonarSource (<a href="https://www.sonarsource.com/docs/CognitiveComplexity.pdf">papier</a> [EN]). C'est une métrique déstinée à mesurer l'effort mental
   que va prendre le cerveau pour comprendre le code source.
   <br>
-  Contrairement à la complexité cyclomatique nous donne une indication sur les tests requis pour couvrir tous les chemins, la complexité cognitive
+  Contrairement à la complexité cyclomatique qui nous donne une indication sur les tests requis pour couvrir tous les chemins, la complexité cognitive
   nous offre une indication sur la charge cognitive et l'effort mental que va prendre la lecture de code.
 </p>
 <p>
@@ -67,6 +67,8 @@
   qui se cache dernière l'indentation. Pour le coup, SonarSource pose ses poids sur le sujet en y apportant une métrique standardisée.
 </p>
 
+  <p>Si on reprenons l'exemple plus haut :
+</p>
 <pre><code class="hljs typescript"><span class="hljs-keyword">FUNCTION</span>() {
   <span class="hljs-keyword">if</span> (condition) { <span class="hljs-comment">//--------------------------- +1</span>
     <span class="hljs-comment">//...</span>
