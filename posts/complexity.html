@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i|Fira+Mono">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/default.css">
+  <title>Complexité cyclomatique et complexité cognitive</title>
+</head>
+<body>
+  <div class="wrapper">
+    <a href="../index.html">Accueil</a>
+    <h1>Complexité cyclomatique et complexité cognitive</h1>
+    <p>
+      Mesurer la qualité d'un code source est compliqué. La déscription de la qualité dans un logiciel de commerce
+      électronique n'est pas la même que dans un logiciel du secteur spatial ou ferroviaire.
+      <br>
+      Cependant, il faut bien se baser sur des indicateurs fiables pour juger la qualité de nos
+      logiciels selon les exigences définis. Et pour ça, plusieurs métriques s'offres à nous.
+    </p>
+
+    <h2>Complexité cyclomatique</h2>
+    <p>
+      La complexité cyclomatique est une métrique déstinée à mesurer le nombre de chemins linéaires et possibles
+      au sein d'un code source. Ce nombre nous donne deux indications :
+      <ul>
+        <li>La maintenabilité du code source car plus ce nombre est grand plus il est difficile de comprendre le code source ;</li>
+        <li>Une indication qualitative sur le nombre minimal de tests nécessaires pour couvrire tous les chemins.</li>
+      </ul>
+    </p>
+    <p>Partant sur la base que la complexité cyclomatique d'une fonction vaut toujours au moins 1. Voici un exemple :</p>
+    
+<pre><code class="hljs typescript"><span class="hljs-keyword">FUNCTION</span>() { <span class="hljs-comment">//----------------------------------- +1</span>
+  <span class="hljs-keyword">if</span> (condition) { <span class="hljs-comment">//--------------------------- +1</span>
+    <span class="hljs-comment">//...</span>
+  } <span class="hljs-keyword">else if</span> (condition) { <span class="hljs-comment">//----------------- +1</span>
+    <span class="hljs-keyword">for</span> (i) { <span class="hljs-comment">//------------------------------------ +1</span>
+      <span class="hljs-keyword">if</span> (condition) { <span class="hljs-comment">//------------------- +1</span>
+        <span class="hljs-comment">//...</span>
+      } <span class="hljs-keyword">else</span> { <span class="hljs-comment">//---------------------------------- +1</span>
+        <span class="hljs-comment">//...</span>
+      }
+    }
+  }
+}
+<span class="hljs-comment">// Total : 6</span>
+</code></pre>
+
+<p>
+  La complexité cyclomatique de cette fonction vaut 6. On y compte la déclaration de la fonction, les différentes branches conditionnels et une boucle.
+</p>
+<p>On peut ainsi poser cette mesure comme une preuve formelle pour juger le nombre de tests nécessaires pour couvrir tous les chemins</p>
+
+<h2>Complexité cognitive</h2>
+<p>
+  Publier en 2016 par SonarSource (<a href="https://www.sonarsource.com/docs/CognitiveComplexity.pdf">papier</a> [EN]). C'est une métrique déstinée à mesurer l'effort mental
+  que va prendre le cerveau pour comprendre le code source.
+  <br>
+  Contrairement à la complexité cyclomatique nous donne une indication sur les tests requis pour couvrir tous les chemins, la complexité cognitive
+  nous offre une indication sur la charge cognitive et l'effort mental que va prendre la lecture de code.
+</p>
+<p>
+  L'étude de la psychologie cognitive appliquée à la programmation n'est pas un sujet récent, c'est d'ailleurs le principe
+  qui se cache dernière l'indentation. Pour le coup, SonarSource pose ses poids sur le sujet en y apportant une métrique standardisée.
+</p>
+
+<pre><code class="hljs typescript"><span class="hljs-keyword">FUNCTION</span>() {
+  <span class="hljs-keyword">if</span> (condition) { <span class="hljs-comment">//--------------------------- +1</span>
+    <span class="hljs-comment">//...</span>
+  } <span class="hljs-keyword">else if</span> (condition) { <span class="hljs-comment">//----------------- +1</span>
+    <span class="hljs-keyword">for</span> (i) { <span class="hljs-comment">//------------------------------------ +2</span>
+      <span class="hljs-keyword">if</span> (condition) { <span class="hljs-comment">//------------------- +3</span>
+        <span class="hljs-comment">//...</span>
+      } <span class="hljs-keyword">else</span> { <span class="hljs-comment">//---------------------------------- +4</span>
+        <span class="hljs-comment">//...</span>
+      }
+    }
+  }
+}
+<span class="hljs-comment">// Total : 11</span>
+</code></pre>
+<p>
+  Ici on rajoute un maluce de 1 à chaque niveau d'imbrication car l'effort nécessaire à la lecture d'un code avec plus
+  plusieurs niveaux d'imbrication est plus important qu'un code à plat.
+</p>
+
+<p>
+  L'usage de cette métrique est intéressant quand elle définie
+  dans un projet d'une manière informelle comme sur le noyeux Linux (<a href="https://www.kernel.org/doc/html/v4.10/process/coding-style.html#indentation">le guide des règles</a> [EN]).
+</p>
+<div class="end-page"></div>
+
+  <script src="../js/hl.js" type="application/javascript"></script>
+</body>
+</html>
