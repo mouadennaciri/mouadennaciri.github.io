@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i|Fira+Mono">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/default.css">
+  <title>Mouad Ennaciri - TypeScript : polymorphisme ad hoc</title>
+</head>
+<body>
+  <div class="wrapper">
+    <a href="../index.html">Accueil</a>
+    <h1>TypeScript : polymorphisme <em>ad hoc</em></h1>
+
+    <p>
+      Le polymorphisme représente le fait qu'une fonction peut prendre plusieurs arguments qui divérgent autant sur le nombre
+      que sur le type. C'est une propriété importante dans un système de type.
+      <br>
+      Cette capacité de généricité permet à une fonction d'effectuer de différentes actions selon le type de ses arguments.
+    </p>
+
+    <p>Illustrons ceci à l'aide d'une fonction qui retourne la queue d'une liste :</p>
+<pre><code class="hljs typescript"><span class="hljs-keyword">function</span> tail(l: Array&#8249;string&rsaquo;): Array&#8249;string&rsaquo;;
+<span class="hljs-keyword">function</span> tail(l: Array&#8249;number&rsaquo;): Array&#8249;number&rsaquo;;
+<span class="hljs-keyword">function</span> tail(l) {
+  <span class="hljs-keyword">const</span> [, ...<span class="hljs-number">r</span>] = l;
+  <span class="hljs-keyword">return</span> <span class="hljs-number">r</span>;
+}</code></pre>
+
+<p>Cette fonction peut s'appliquer à la fois sur des nombres et des chaînes de caractères :</p>
+<pre><code class="hljs typescript"><span class="hljs-keyword">const</span> a = <span class="hljs-keyword">tail</span>([6, 7, 8, 9]); <span class="hljs-comment">// a est une liste de nombres.</span>
+<span class="hljs-keyword">const</span> b = <span class="hljs-keyword">tail</span>(['m', 'z', 'p']); <span class="hljs-comment">// b est une liste de chaînes de caractères.</span>
+<span class="hljs-keyword">const</span> c = <span class="hljs-keyword">tail</span>([1, 7, 'p']); <span class="hljs-comment">// Erreur</span>
+</code></pre>
+
+<p>On peut ainsi dire que l'argument <code>l</code> de la fonction <code>tail</code> peut être une liste de n'importe quel type <code>a</code>.</p>
+<div class="custom-code-bloc">
+  <span>a list -> a list</span>
+</div>
+<p><code>a</code> ici est un type polymorphe.</p>
+
+<br>
+<p>
+  L'exemple ci-contre n'implique pas une divergence des actions de la fonction dû à la variante du type. La fonction réalise toujours les mêmes actions.
+  <br>
+  Cependant, on souhaite maintenant appliquer différentes actions selon la variante du type <code>a</code>.
+</p>
+<p>Texas rangées :
+  <br>
+  Voici une implémentation naïve de la fonction <a href="http://zvon.org/other/haskell/Outputix/range_f.html"><code>range</code></a>.
+</p>
+
+<pre><code class="hljs typescript"><span class="hljs-keyword">function</span> range(<span class="hljs-params">first</span>: string, <span class="hljs-params">last</span>: string): Array&#8249;string&rsaquo;;
+<span class="hljs-keyword">function</span> tail(<span class="hljs-params">first</span>: number, <span class="hljs-params">last</span>: number): Array&#8249;number&rsaquo;;
+<span class="hljs-keyword">function</span> tail(<span class="hljs-params">first</span>, <span class="hljs-params">last</span>) {
+  <span class="hljs-keyword">if</span> (isString(<span class="hljs-params">first</span>) <span class="hljs-number">&&</span> isString(<span class="hljs-params">last</span>)) {
+    <span class="hljs-comment">// Ici on a la garantie que les arguments `first` et `last` sont de type chaîne de caractères.</span>
+    <span class="hljs-keyword">const</span> [<span class="hljs-built_in">a</span>, <span class="hljs-built_in">b</span>] = [<span class="hljs-params">first</span>.charCodeAt(<span class="hljs-number">0</span>), <span class="hljs-params">last</span>.charCodeAt(<span class="hljs-number">0</span>) + <span class="hljs-number">1</span>];
+    <span class="hljs-keyword">return</span> Array.apply(null, { length: Math.abs(<span class="hljs-built_in">b</span> - <span class="hljs-built_in">a</span>) })
+      .map((_, i: number) => String.fromCharCode(Math.min(<span class="hljs-built_in">a</span>, <span class="hljs-built_in">b</span>) + i));
+  }
+
+  <span class="hljs-comment">// Ici on a la garantie que les arguments `first` et `last` sont de type nombre.</span>
+  <span class="hljs-keyword">return</span> Array(Math.ceil(<span class="hljs-params">last</span> - <span class="hljs-params">first</span>)).fill(<span class="hljs-params">first</span>).map((x, y) => x + y);
+}
+
+<span class="hljs-keyword">function</span> isString(<span class="hljs-params">p</span>): <span class="hljs-params">p</span> <span class="hljs-keyword">is</span> string {
+  <span class="hljs-keyword">return</span> typeof <span class="hljs-params">p</span> === <span class="hljs-string">'string'</span>;
+}
+</code></pre>
+
+<p>Avec la validation du prédicat <code>isString(p)</code> on peut garantir la sûreté du type sur chaque bloc local de la fonction.</p>
+
+<pre><code class="hljs typescript"><span class="hljs-keyword">const</span> a = <span class="hljs-keyword">range</span>('e', 'o'); <span class="hljs-comment">// a est de type chaîne de caractère.</span>
+<span class="hljs-keyword">const</span> b = <span class="hljs-keyword">range</span>(2, 5); <span class="hljs-comment">// b est de type nombre.</span>
+<span class="hljs-keyword">const</span> c = <span class="hljs-keyword">range</span>(2, 'p'); <span class="hljs-comment">// Erreur</span>
+</code></pre>
+
+<br>
+<h2>Conclusion :</h2>
+<p>Le polymorphisme <em>ad hoc</em> est d'ailleurs le concept derière les opérateurs arithmétiques (<code>+</code>, <code>-</code>, etc...). L'opérateur <code>+</code> peut être utilisé soit pour additionner deux nombres
+soit pour concaténer une chaîne de caractères.
+<br>
+Le langage OCaml qui souffre de l'absence du polymorphisme <em>ad hoc</em> a à la fois l'opérateur <code>+</code> applicable aux entiers (<code>int</code>)
+et l'opérateur <code>+.</code> qui est applicable aux nombres à virgule flottante (<code>float</code>). 
+</p>
+</div>
+<div class="end-page"></div>
+  <script src="../js/hl.js" type="application/javascript"></script>
+</body>
+</html>
