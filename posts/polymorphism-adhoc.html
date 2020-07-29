@@ -16,10 +16,10 @@
     <h1>TypeScript : polymorphisme <em>ad hoc</em></h1>
 
     <p>
-      Le polymorphisme représente le fait qu'une fonction peut prendre plusieurs arguments qui divérgent autant sur le nombre
+      Le polymorphisme <em>ad hoc</em> représente le fait qu'une fonction puisse prendre plusieurs arguments qui divérgent autant sur le nombre
       que sur le type. C'est une propriété importante dans un système de type.
       <br>
-      Cette capacité de généricité permet à une fonction d'effectuer de différentes actions selon le type de ses arguments.
+      Cette capacité de généricité permet à une fonction d'effectuer différentes actions selon le type de ses arguments.
     </p>
 
     <p>Illustrons ceci à l'aide d'une fonction qui retourne la queue d'une liste :</p>
@@ -54,8 +54,8 @@
 </p>
 
 <pre><code class="hljs typescript"><span class="hljs-keyword">function</span> range(<span class="hljs-params">first</span>: string, <span class="hljs-params">last</span>: string): Array&#8249;string&rsaquo;;
-<span class="hljs-keyword">function</span> tail(<span class="hljs-params">first</span>: number, <span class="hljs-params">last</span>: number): Array&#8249;number&rsaquo;;
-<span class="hljs-keyword">function</span> tail(<span class="hljs-params">first</span>, <span class="hljs-params">last</span>) {
+<span class="hljs-keyword">function</span> range(<span class="hljs-params">first</span>: number, <span class="hljs-params">last</span>: number): Array&#8249;number&rsaquo;;
+<span class="hljs-keyword">function</span> range(<span class="hljs-params">first</span>, <span class="hljs-params">last</span>) {
   <span class="hljs-keyword">if</span> (isString(<span class="hljs-params">first</span>) <span class="hljs-number">&&</span> isString(<span class="hljs-params">last</span>)) {
     <span class="hljs-comment">// Ici on a la garantie que les arguments `first` et `last` sont de type chaîne de caractères.</span>
     <span class="hljs-keyword">const</span> [<span class="hljs-built_in">a</span>, <span class="hljs-built_in">b</span>] = [<span class="hljs-params">first</span>.charCodeAt(<span class="hljs-number">0</span>), <span class="hljs-params">last</span>.charCodeAt(<span class="hljs-number">0</span>) + <span class="hljs-number">1</span>];
