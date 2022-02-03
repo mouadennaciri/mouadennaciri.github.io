@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Lato:400,400i,700,700i|Fira+Mono">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/default.css">
+  <title>Angular : des templates stricts et des diagnostiques étendus</title>
+</head>
+<body>
+  <div class="wrapper">
+    <a href="../index.html">Accueil</a>
+    <h1>Angular : des templates stricts et des diagnostiques étendus</h1>
+    <h2>Prologue</h2>
+    <p>TypeScript offre de nombreuses configurations pour contrôler le niveau rigueur de la vérification de type.
+      L'un des configurations le plus important est le mode strict qui est se défini comme un ensemble de plusieurs règles.
+      <br>
+      En suivant la même idée, Angular a également sa panoplie de règles définissable que le compilateur peut suivre.
+      Historiquement, la plus connue est <code>fullTemplateTypeCheck</code>.
+    </p>
+    <br>
+    <h2>Trois modes de restriction</h2>
+    Angular a aujourd'hui trois modes de restriction pour vérifier le niveau de rigueur qu'on souhaite avoir dans les templates :
+    basique, complet et strict (<em>basic</em>, <em>full</em> et <em>strict</em>).
+
+    <h3>Le mode basique</h3>
+    Ouvrons le fichier <code>tsconfig.json</code> et passons l'option <code>fullTemplateTypeCheck</code> à <code>false</code>.
+    <pre><code class="hljs typescript">"angularCompilerOptions": {
+  "fullTemplateTypeCheck": false
+}</code></pre>
+    <p>Avec le mode basique, seule la vérification de l'existence des membres de la classe en dehors des directives de structure est vérifiée.</p>
+    <img src="../images/code1.png" alt="" style="width: 500px;">
+    <p>Si on omet le premier élément <code>p</code> Angular peut construire l'application avec tout le code dans la directive <code>NgFor</code> sachant que :</p>
+    <ul>
+      <li>Les éléments du tableau <code>books</code> n'ont pas de propriété <code>name</code> ;</li>
+      <li>L'objet <code>user</code> n'est pas membre de la classe.</li>
+    </ul>
+
+    <h2>Le mode complet</h2>
+    <p>Maintenant si on passe <code>fullTemplateTypeCheck</code> à <code>true</code> :</p>
+    <img src="../images/code2.png" alt="" style="width: 500px;">
+    <p>L'erreur de l'objet <code>user</code> est remontée. Cependant, la ligne 7 reste valide.</p>
+
+    <h3>Le mode strict</h3>
+    <p>Depuis Angular 9 avec la sortie du nouveau moteur de rendu Ivy on a eu droit à un nouvelle option : <code>strictTemplates</code>.
+      Cette règle vient remplacer <code>fullTemplateTypeCheck</code> en important tous ces avantages et bien plus. <br>
+      <pre><code class="hljs typescript">"angularCompilerOptions": {
+  "strictTemplates": true
+}</code></pre>
+      <code>fullTemplateTypeCheck</code>est dépréciée à partir de la version 13 et peut donc être supprimée.</p>
+    <img src="../images/code3.png" alt="" style="width: 500px;">
+    <p>Désormais, le type des éléments du tableau <code>books</code> est correctement déduit sur la directive de structure <code>NgFor</code>. <br>
+    Comme dit plus haut, <code>strictTemplates</code> est un ensemble de règles, soit chaque règle peut être activé ou non indépendamment.
+    Par exemple, parmis ces règles : <code>strictInputTypes</code> qui est définie par défaut à <code>true</code> dans <code>strictTemplates</code>
+    mais on peut le modifié manuellement.
+    </p>
+    <p>Si <code>strictInputTypes</code> est <code>true</code> (sa valeur par défaut dans <code>strictTemplates</code>) :</p>
+    <img src="../images/code4.png" alt="" style="width: 500px;">
+    <p>Ici on essaie de passer en <em>binding</em> une valeur de type nombre, le chiffre 18, alors que le composant
+    <code>BookComponent</code> attend une chaîne de caractères.</p>
+
+    <h2>Conclusion</h2>
+    <p>Angular a été longtemps critiqué sur l'absence de cohérence des types entre le contrôleur et le template mais ceci a été largement
+      amélioré depuis la version 9 et la core team Angular continue à chercher à étendre le diagnostique des types.
+    </p>
+<div class="end-page"></div>
+
+  <script src="../js/hl.js" type="application/javascript"></script>
+</body>
+</html>
