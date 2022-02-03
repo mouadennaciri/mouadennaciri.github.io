@@ -16,7 +16,7 @@
     <h1 style="text-align: center;">Angular : des templates stricts et des diagnostiques étendus</h1>
     <h2>Prologue</h2>
     <p>TypeScript offre de nombreuses configurations pour contrôler le niveau rigueur de la vérification de type.
-      L'une des configurations la plus importante est le mode strict qui est se défini comme un ensemble de plusieurs règles.
+      L'une des configurations la plus importante est le mode strict qui se défini comme un ensemble de plusieurs règles.
       <br>
       En suivant la même idée, Angular a également sa panoplie de règles définissable que le compilateur peut suivre.
       Historiquement, la plus connue est <code>fullTemplateTypeCheck</code>.
@@ -42,10 +42,10 @@
     <h2>Le mode complet</h2>
     <p>Maintenant si on passe <code>fullTemplateTypeCheck</code> à <code>true</code> :</p>
     <img src="../images/code2.png" alt="" style="width: 500px;">
-    <p>L'erreur de l'objet <code>user</code> est remontée. Cependant, la ligne 7 reste valide.</p>
+    <p>L'erreur de l'objet <code>user</code> est remontée. Cependant, la ligne 8 reste valide.</p>
 
     <h3>Le mode strict</h3>
-    <p>Depuis Angular 9 avec la sortie du nouveau moteur de rendu Ivy on a eu droit à un nouvelle option : <code>strictTemplates</code>.
+    <p>Depuis Angular 9 avec la sortie du nouveau moteur de rendu Ivy on a eu droit à une nouvelle option : <code>strictTemplates</code>.
       Cette règle vient remplacer <code>fullTemplateTypeCheck</code> en important tous ces avantages et bien plus. <br>
       <pre><code class="hljs typescript">"angularCompilerOptions": {
   "strictTemplates": true
@@ -53,7 +53,7 @@
       <code>fullTemplateTypeCheck</code>est dépréciée à partir de la version 13 et peut donc être supprimée.</p>
     <img src="../images/code3.png" alt="" style="width: 500px;">
     <p>Désormais, le type des éléments du tableau <code>books</code> est correctement déduit sur la directive de structure <code>NgFor</code>. <br>
-    Comme dit plus haut, <code>strictTemplates</code> est un ensemble de règles, soit chaque règle peut être activé ou non indépendamment.
+    Comme dit plus haut, <code>strictTemplates</code> est un ensemble de règles, soit chaque règle peut être activée ou non indépendamment.
     Par exemple, parmis ces règles : <code>strictInputTypes</code> qui est définie par défaut à <code>true</code> dans <code>strictTemplates</code>
     mais on peut le modifié manuellement.
     </p>
