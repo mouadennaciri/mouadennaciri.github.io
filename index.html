@@ -36,8 +36,8 @@
         </div>
       </div>
 
-      <button id="installBtn" onclick="installApp()" style="display: none">
-        📲 Installer l’application
+      <button id="installBtn" onclick="installApp2()" style="display: none">
+        📲 Installer l'application test
       </button>
 
       <div class="articles">
@@ -98,7 +98,7 @@
         document.getElementById("installBtn").style.display = "block";
       });
 
-      async function installApp() {
+      async function installApp2() {
         if (!deferredPrompt) return;
         deferredPrompt.prompt(); // Show the install prompt
         const { outcome } = await deferredPrompt.userChoice;
