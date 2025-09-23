@@ -49,3 +49,29 @@ h2, h3 {
 .end-page {
   margin-bottom: 60px;
 }
+
+.install-button {
+  background: linear-gradient(135deg, #1a6e8e, #2980b9);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-family: "Lato", serif;
+  cursor: pointer;
+  margin-top: 20px;
+  display: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(26, 110, 142, 0.3);
+}
+
+.install-button:hover {
+  background: linear-gradient(135deg, #2980b9, #3498db);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(26, 110, 142, 0.4);
+}
+
+.install-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(26, 110, 142, 0.3);
+}

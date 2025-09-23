@@ -31,6 +31,10 @@
           <a href="https://twitter.com/mouadenn">Twitter</a>
           <a href="https://www.github.com/mouadennaciri/">GitHub</a>
         </div>
+        
+        <button id="installButton" class="install-button" style="display: none;">
+          📱 Installer l'application
+        </button>
       </div>
 
       <div class="articles">
@@ -73,6 +77,40 @@
               console.log('ServiceWorker registration failed: ', err);
             });
         });
+      }
+
+      // PWA Install functionality
+      let deferredPrompt;
+      const installButton = document.getElementById('installButton');
+
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        installButton.style.display = 'block';
+      });
+
+      installButton.addEventListener('click', async () => {
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          const { outcome } = await deferredPrompt.userChoice;
+          if (outcome === 'accepted') {
+            console.log('User accepted the install prompt');
+            installButton.style.display = 'none';
+          }
+          deferredPrompt = null;
+        }
+      });
+
+      window.addEventListener('appinstalled', () => {
+        console.log('PWA was installed');
+        installButton.style.display = 'none';
+        deferredPrompt = null;
+      });
+
+      // Check if app is already installed
+      if (window.matchMedia('(display-mode: standalone)').matches || 
+          window.navigator.standalone === true) {
+        installButton.style.display = 'none';
       }
     </script>
   </body>
