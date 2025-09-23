@@ -15,7 +15,10 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <meta name="apple-mobile-web-app-title" content="Mouad Ennaciri" />
-    <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiBmaWxsPSIjMDAwMDAwIi8+Cjx0ZXh0IHg9Ijk2IiB5PSIxMTAiIGZpbGw9IndoaXRlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiPk08L3RleHQ+Cjwvc3ZnPgo=" />
+    <link
+      rel="apple-touch-icon"
+      href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiBmaWxsPSIjMDAwMDAwIi8+Cjx0ZXh0IHg9Ijk2IiB5PSIxMTAiIGZpbGw9IndoaXRlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiPk08L3RleHQ+Cjwvc3ZnPgo="
+    />
     <title>Mouad Ennaciri - Accueil</title>
   </head>
   <body>
@@ -31,11 +34,11 @@
           <a href="https://twitter.com/mouadenn">Twitter</a>
           <a href="https://www.github.com/mouadennaciri/">GitHub</a>
         </div>
-        
-        <button id="installButton" class="install-button" style="display: none;">
-          📱 Installer l'application
-        </button>
       </div>
+
+      <button id="installBtn" onclick="installApp()" style="display: none">
+        📲 Installer l’application
+      </button>
 
       <div class="articles">
         <h2>Articles</h2>
@@ -68,94 +71,41 @@
     </main>
     <script src="./js/hl.js" type="application/javascript"></script>
     <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-          navigator.serviceWorker.register('./sw.js')
-            .then(function(registration) {
-              console.log('ServiceWorker registration successful with scope: ', registration.scope);
-            }, function(err) {
-              console.log('ServiceWorker registration failed: ', err);
-            });
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function () {
+          navigator.serviceWorker.register("./sw.js").then(
+            function (registration) {
+              console.log(
+                "ServiceWorker registration successful with scope: ",
+                registration.scope
+              );
+            },
+            function (err) {
+              console.log("ServiceWorker registration failed: ", err);
+            }
+          );
         });
       }
+    </script>
 
-      // PWA Install functionality
-      let deferredPrompt;
-      const installButton = document.getElementById('installButton');
+    <script>
+      let deferredPrompt; // Will store the event
 
-      // Function to check if app can be installed
-      function checkInstallability() {
-        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || 
-                           window.navigator.standalone === true;
-        
-        if (isStandalone) {
-          installButton.style.display = 'none';
-          return;
-        }
-
-        // Check for Android Chrome specifically
-        const isAndroidChrome = /Android.*Chrome/i.test(navigator.userAgent) && 
-                               !/Edg|OPR|Samsung/i.test(navigator.userAgent);
-        const isSecure = window.location.protocol === 'https:' || window.location.hostname === 'localhost';
-        
-        console.log('Android Chrome detected:', isAndroidChrome);
-        console.log('Secure context:', isSecure);
-        console.log('Service Worker supported:', 'serviceWorker' in navigator);
-        
-        // For Android Chrome, wait for service worker registration and show button
-        if (isAndroidChrome && isSecure && 'serviceWorker' in navigator) {
-          setTimeout(() => {
-            if (!isStandalone && !deferredPrompt) {
-              console.log('Showing install button for Android Chrome');
-              installButton.style.display = 'block';
-            }
-          }, 3000); // Wait longer for SW registration
-        }
-      }
-
-      window.addEventListener('beforeinstallprompt', (e) => {
-        console.log('beforeinstallprompt fired');
-        e.preventDefault();
+      window.addEventListener("beforeinstallprompt", (e) => {
+        e.preventDefault(); // Prevent the mini-infobar from appearing
         deferredPrompt = e;
-        installButton.style.display = 'block';
+        // Show your custom install button
+        document.getElementById("installBtn").style.display = "block";
       });
 
-      installButton.addEventListener('click', async () => {
-        if (deferredPrompt) {
-          console.log('Using deferredPrompt');
-          deferredPrompt.prompt();
-          const { outcome } = await deferredPrompt.userChoice;
-          if (outcome === 'accepted') {
-            console.log('User accepted the install prompt');
-            installButton.style.display = 'none';
-          }
-          deferredPrompt = null;
-        } else {
-          console.log('No deferredPrompt available');
-          // Fallback for browsers without beforeinstallprompt
-          const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-          const isAndroidChrome = /Android.*Chrome/i.test(navigator.userAgent);
-          
-          if (isIOS) {
-            alert('Pour installer cette app sur iOS:\n1. Appuyez sur le bouton de partage\n2. Sélectionnez "Ajouter à l\'écran d\'accueil"');
-          } else if (isAndroidChrome) {
-            alert('Pour installer cette app sur Android:\n1. Appuyez sur le menu ⋮ de Chrome\n2. Sélectionnez "Ajouter à l\'écran d\'accueil"');
-          } else {
-            alert('Pour installer cette app:\n1. Ouvrez le menu du navigateur\n2. Sélectionnez "Ajouter à l\'écran d\'accueil" ou "Installer l\'application"');
-          }
-        }
-      });
-
-      window.addEventListener('appinstalled', () => {
-        console.log('PWA was installed');
-        installButton.style.display = 'none';
-        deferredPrompt = null;
-      });
-
-      // Check installability on load and after SW registration
-      window.addEventListener('load', () => {
-        setTimeout(checkInstallability, 1000);
-      });
+      async function installApp() {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt(); // Show the install prompt
+        const { outcome } = await deferredPrompt.userChoice;
+        console.log(`User response: ${outcome}`);
+        deferredPrompt = null; // Reset so it cannot be used again
+        document.getElementById("installBtn").style.display = "none";
+      }
     </script>
   </body>
 </html>
