@@ -20,8 +20,172 @@
       href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiBmaWxsPSIjMDAwMDAwIi8+Cjx0ZXh0IHg9Ijk2IiB5PSIxMTAiIGZpbGw9IndoaXRlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiPk08L3RleHQ+Cjwvc3ZnPgo="
     />
     <title>Mouad Ennaciri - Accueil</title>
+    <style>
+      /* iOS-style PWA install banner */
+      .pwa-install-banner {
+        position: fixed;
+        top: -120px;
+        left: 0;
+        right: 0;
+        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        padding: 16px 20px;
+        z-index: 1000;
+        transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+      }
+
+      .pwa-install-banner.show {
+        transform: translateY(120px);
+      }
+
+      .pwa-banner-content {
+        display: flex;
+        align-items: center;
+        max-width: 600px;
+        margin: 0 auto;
+        gap: 16px;
+      }
+
+      .pwa-app-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        background: linear-gradient(45deg, #000000, #333333);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        font-size: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .pwa-banner-text {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .pwa-app-name {
+        font-weight: 600;
+        font-size: 16px;
+        color: #1a1a1a;
+        margin: 0 0 2px 0;
+        line-height: 1.2;
+      }
+
+      .pwa-app-subtitle {
+        font-size: 14px;
+        color: #666;
+        margin: 0;
+        line-height: 1.3;
+      }
+
+      .pwa-banner-actions {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .pwa-install-btn {
+        background: #007AFF;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 8px rgba(0, 122, 255, 0.3);
+      }
+
+      .pwa-install-btn:hover {
+        background: #0056b3;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 122, 255, 0.4);
+      }
+
+      .pwa-install-btn:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 6px rgba(0, 122, 255, 0.3);
+      }
+
+      .pwa-close-btn {
+        background: none;
+        border: none;
+        color: #666;
+        font-size: 20px;
+        cursor: pointer;
+        padding: 4px;
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+      }
+
+      .pwa-close-btn:hover {
+        background: rgba(0, 0, 0, 0.08);
+        color: #333;
+      }
+
+      /* Mobile responsive */
+      @media (max-width: 480px) {
+        .pwa-install-banner {
+          padding: 12px 16px;
+        }
+        
+        .pwa-banner-content {
+          gap: 12px;
+        }
+        
+        .pwa-app-icon {
+          width: 40px;
+          height: 40px;
+          font-size: 18px;
+        }
+        
+        .pwa-app-name {
+          font-size: 15px;
+        }
+        
+        .pwa-app-subtitle {
+          font-size: 13px;
+        }
+        
+        .pwa-install-btn {
+          padding: 8px 16px;
+          font-size: 13px;
+        }
+      }
+
+      /* Hide old install button */
+      #installBtn {
+        display: none !important;
+      }
+    </style>
   </head>
   <body>
+    <!-- iOS-style PWA Install Banner -->
+    <div id="pwaBanner" class="pwa-install-banner">
+      <div class="pwa-banner-content">
+        <div class="pwa-app-icon">M</div>
+        <div class="pwa-banner-text">
+          <div class="pwa-app-name">Mouad Ennaciri</div>
+          <div class="pwa-app-subtitle">Installer l'app pour un accès rapide</div>
+        </div>
+        <div class="pwa-banner-actions">
+          <button class="pwa-install-btn" onclick="installPWA()">Installer</button>
+          <button class="pwa-close-btn" onclick="closeBanner()" aria-label="Fermer">×</button>
+        </div>
+      </div>
+    </div>
+
     <main class="wrapper">
       <div>
         <h1>Mouad Ennaciri</h1>
@@ -36,9 +200,7 @@
         </div>
       </div>
 
-      <button id="installBtn" onclick="installApp2()" style="display: none">
-        📲 Installer l'application test
-      </button>
+      <button id="installBtn" onclick="installApp2()">📲 Install app</button>
 
       <div class="articles">
         <h2>Articles</h2>
@@ -89,23 +251,85 @@
     </script>
 
     <script>
-      let deferredPrompt; // Will store the event
+      let deferredPrompt;
+      const pwaBanner = document.getElementById('pwaBanner');
+      
+      // Check if banner was previously dismissed
+      const bannerDismissed = localStorage.getItem('pwa-banner-dismissed');
+      const bannerDismissTime = localStorage.getItem('pwa-banner-dismiss-time');
+      const daysSinceDismiss = bannerDismissTime ? 
+        (Date.now() - parseInt(bannerDismissTime)) / (1000 * 60 * 60 * 24) : 0;
 
       window.addEventListener("beforeinstallprompt", (e) => {
-        e.preventDefault(); // Prevent the mini-infobar from appearing
+        e.preventDefault();
         deferredPrompt = e;
-        // Show your custom install button
-        document.getElementById("installBtn").style.display = "block";
+        
+        // Show banner if not dismissed or if dismissed more than 7 days ago
+        if (!bannerDismissed || daysSinceDismiss > 7) {
+          showBanner();
+        }
       });
 
-      async function installApp2() {
-        if (!deferredPrompt) return;
-        deferredPrompt.prompt(); // Show the install prompt
-        const { outcome } = await deferredPrompt.userChoice;
-        console.log(`User response: ${outcome}`);
-        deferredPrompt = null; // Reset so it cannot be used again
-        document.getElementById("installBtn").style.display = "none";
+      window.addEventListener("appinstalled", () => {
+        console.log("PWA installed successfully");
+        hideBanner();
+        localStorage.removeItem('pwa-banner-dismissed');
+        localStorage.removeItem('pwa-banner-dismiss-time');
+      });
+
+      function showBanner() {
+        setTimeout(() => {
+          pwaBanner.classList.add('show');
+        }, 1000); // Delay to ensure page is loaded
       }
+
+      function hideBanner() {
+        pwaBanner.classList.remove('show');
+      }
+
+      function closeBanner() {
+        hideBanner();
+        localStorage.setItem('pwa-banner-dismissed', 'true');
+        localStorage.setItem('pwa-banner-dismiss-time', Date.now().toString());
+      }
+
+      async function installPWA() {
+        if (!deferredPrompt) {
+          console.log('No install prompt available');
+          return;
+        }
+
+        try {
+          deferredPrompt.prompt();
+          const { outcome } = await deferredPrompt.userChoice;
+          console.log(`Install prompt result: ${outcome}`);
+          
+          if (outcome === 'accepted') {
+            hideBanner();
+          }
+          
+          deferredPrompt = null;
+        } catch (error) {
+          console.error('Error during installation:', error);
+        }
+      }
+
+      // Auto-hide banner after 30 seconds if no interaction
+      let autoHideTimeout;
+      window.addEventListener("beforeinstallprompt", () => {
+        autoHideTimeout = setTimeout(() => {
+          if (pwaBanner.classList.contains('show')) {
+            closeBanner();
+          }
+        }, 30000);
+      });
+
+      // Clear timeout if user interacts with banner
+      pwaBanner.addEventListener('click', () => {
+        if (autoHideTimeout) {
+          clearTimeout(autoHideTimeout);
+        }
+      });
     </script>
   </body>
 </html>
